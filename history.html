@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>基于 history 实现路由</title>
+</head>
+<body>
+	<ul>
+		<li><a href="/home">home</a></li>
+		<li><a href="/user">user</a></li>
+	</ul>
+	<div id="app"></div>
+	<script>
+		const view = document.querySelector('#app');
+		window.addEventListener('DOMContentLoaded', () => {
+			view.innerHTML = location.pathname;
+			// 拦截<a>标签的跳转，向页面栈增加一条记录
+			document.querySelectorAll('a[href]').forEach(link => {
+				link.addEventListener('click', (e) => {
+					e.preventDefault();
+					history.pushState(null, '', link.getAttribute('href'));
+					view.innerHTML = location.pathname;
+				})
+			})
+		});
+		// 只有 history.go/history.back/history.forward 才可以触发 popstate 事件
+		window.addEventListener('popstate', (e) => {
+			view.innerHTML = location.pathname;
+		});
+
+	</script>	
+</body>
+</html>

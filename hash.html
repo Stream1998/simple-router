@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>基于 hash 实现路由</title>
+</head>
+<body>
+	<ul>
+		<!-- 通过<a>标签来改变 hash 的值 -->
+		<li><a href="#/home">home</a></li>
+		<li><a href="#/user">user</a></li>
+	</ul>
+	<!-- 渲染区域 -->
+	<div id="app"></div>
+	<script>
+		const view = document.getElementById('app');
+		// 路由表
+		const router = {
+			'/': '首次渲染 ',
+			'/home': 'home',
+			'/user': 'user',
+		}
+		// 首次渲染是不带hash的，重定向到 #/, 触发 hashchange 事件
+		window.addEventListener('DOMContentLoaded', _ => {
+			if(!location.hash) {
+				location.hash = '/';
+			} else {
+				render();
+			}
+		});
+		// 监听 hash 变化，进而改变渲染内容
+		window.addEventListener('hashchange', _ => {
+			render();
+		});
+		// 路由匹配，渲染内容
+		function render() {
+			const hash = location.hash.slice(1);
+			const content = hash in router ? router[hash] : '';
+			view.innerHTML = content;
+		}
+	</script>
+</body>
+</html>
